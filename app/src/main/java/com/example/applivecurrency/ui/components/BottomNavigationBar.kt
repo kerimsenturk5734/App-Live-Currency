@@ -1,5 +1,6 @@
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.applivecurrency.R
 import com.example.applivecurrency.Tab
 import com.example.applivecurrency.ui.components.backgroundColor
+import com.example.applivecurrency.ui.components.borderColor
 import com.example.applivecurrency.ui.components.componentColor
 import com.example.applivecurrency.ui.components.foregroundColor
 
@@ -27,7 +29,11 @@ fun BottomNavigationBar(selectedTab: Tab, onTabSelected: (Tab) -> Unit) {
     BottomAppBar(
         modifier = Modifier
             .background(backgroundColor())
-            .shadow(5.dp, RoundedCornerShape(8.dp)),
+            .shadow(
+                elevation = 16.dp,
+                shape = RoundedCornerShape(40.dp),
+            )
+            .border(1.dp, borderColor(), RoundedCornerShape(40.dp)),
         contentPadding = PaddingValues(0.dp),
     ) {
         Row(

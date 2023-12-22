@@ -1,7 +1,6 @@
 package com.example.applivecurrency.ui.components
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
@@ -16,6 +15,16 @@ fun foregroundColor() : Color{
 }
 
 @Composable
+fun primaryComponentColor() : Color{
+    return if(isSystemInDarkTheme()) Color(0xFF252525) else Color(0xFF7EA7F3)
+}
+
+@Composable
 fun componentColor() : Color{
-    return if(isSystemInDarkTheme()) Color(0xFF252525) else MaterialTheme.colorScheme.inversePrimary
+    return if(isSystemInDarkTheme()) Color(0xFF252525) else Color(0xFFACACAC)
+}
+
+@Composable
+fun borderColor() : Color{
+    return if(isSystemInDarkTheme()) Color.DarkGray else Color.Gray
 }
