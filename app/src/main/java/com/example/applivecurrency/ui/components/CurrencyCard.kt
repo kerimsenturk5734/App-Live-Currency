@@ -30,7 +30,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -64,7 +66,15 @@ fun CurrencyCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(componentColor())
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            backgroundColor(),
+                            primaryComponentColor()
+                        ),
+                        tileMode = TileMode.Mirror
+                    )
+                )
                 .padding(3.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically){
@@ -84,10 +94,11 @@ fun CurrencyCard(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically){
 
-                Text(text = annotateCurrencyName(currency.name))
+                Text(text = annotateCurrencyName(currency.name), color = foregroundColor())
                 Text(
                     modifier = Modifier.fillMaxWidth(0.4f),
                     text = annotateCurrencyRate(currency.rate),
+                    color = foregroundColor(),
                     textAlign = TextAlign.Center)
 
                 Row(modifier =
@@ -131,7 +142,6 @@ fun annotateCurrencyName(text: String): AnnotatedString {
             style = SpanStyle(
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.White,
                 fontFamily = FontFamily.Monospace)
         ){
             append(text)
@@ -145,7 +155,6 @@ fun annotateCurrencyRate(rate: Double): AnnotatedString {
             style = SpanStyle(
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
                 fontFamily = FontFamily.Monospace,
             )
         ){

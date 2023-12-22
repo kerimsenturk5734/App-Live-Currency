@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -31,17 +32,15 @@ fun BottomNavigationBar(selectedTab: Tab, onTabSelected: (Tab) -> Unit) {
     BottomAppBar(
         modifier = Modifier
             .background(backgroundColor())
-            .shadow(
-                elevation = 16.dp,
-                shape = RoundedCornerShape(40.dp),
-            )
-            .border(1.dp, borderColor(), RoundedCornerShape(40.dp)),
+            .border(1.dp, borderColor(), RoundedCornerShape(50.dp))
+            .shadow(elevation = 1.dp, RoundedCornerShape(100.dp)),
         contentPadding = PaddingValues(0.dp),
     ) {
         Row(
             modifier = Modifier
                 .background(componentColor())
-                .fillMaxSize(),
+                .fillMaxSize()
+                .clip(RoundedCornerShape(50.dp)),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {

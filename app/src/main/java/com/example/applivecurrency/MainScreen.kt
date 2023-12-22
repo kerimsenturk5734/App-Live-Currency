@@ -60,22 +60,11 @@ fun RenderTab(
 
    Column(modifier = modifier.padding(5.dp)){
        when(tab){
-           Tab.LIVE_CURRENCY -> {
-               //Render Live Currency Tab
-               LiveCurrencyTab()
-           }
-           Tab.FAVORITES -> {
-               //Render favorite currencies list
-               FavoritesTab()
-           }
-           Tab.CALCULATOR ->{
-               //Render currency calculator
-               CalculatorTab()
-           }
+           Tab.LIVE_CURRENCY -> LiveCurrencyTab()
+           Tab.FAVORITES -> FavoritesTab()
+           Tab.CALCULATOR -> CalculatorTab()
 
-           else -> {
-               Text("Content not found")
-           }
+           else -> Text("Content not found")
        }
    }
 }

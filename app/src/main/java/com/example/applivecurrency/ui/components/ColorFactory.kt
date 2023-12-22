@@ -16,12 +16,12 @@ fun foregroundColor() : Color{
 
 @Composable
 fun primaryComponentColor() : Color{
-    return if(isSystemInDarkTheme()) Color(0xFF252525) else Color(0xFF7EA7F3)
+    return if(isSystemInDarkTheme()) Color(0xFF252525) else Color(0xFFF7CA5F)
 }
 
 @Composable
 fun componentColor() : Color{
-    return if(isSystemInDarkTheme()) Color(0xFF252525) else Color(0xFFACACAC)
+    return if(isSystemInDarkTheme()) Color(0xFF252525) else Color.White
 }
 
 @Composable
