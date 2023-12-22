@@ -31,6 +31,7 @@ fun SearchBar(onSearch: (String) -> Unit) {
             value = query,
             onValueChange = {
                 query = it
+                onSearch(query)
             },
             modifier = Modifier
                 .fillMaxWidth()
