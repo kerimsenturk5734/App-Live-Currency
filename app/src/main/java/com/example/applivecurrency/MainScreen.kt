@@ -1,7 +1,6 @@
 package com.example.applivecurrency
 
-import BottomNavigationBar
-import SearchBar
+import com.example.applivecurrency.ui.components.bar.BottomNavigationBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.applivecurrency.ui.components.tab.CalculatorTab
+import com.example.applivecurrency.ui.components.tab.FavoritesTab
+import com.example.applivecurrency.ui.components.tab.LiveCurrencyTab
 import com.example.applivecurrency.ui.components.backgroundColor
+import com.example.applivecurrency.ui.components.bar.TopBannerBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,6 +30,7 @@ fun MainScreen(navController: NavController){
     var selectedTab by remember { mutableStateOf(Tab.LIVE_CURRENCY) }
 
     Scaffold(
+        topBar = { TopBannerBar()},
         bottomBar = {
             BottomNavigationBar(selectedTab = selectedTab) {
                 selectedTab = it
@@ -54,32 +58,28 @@ fun RenderTab(
     modifier: Modifier = Modifier,
     tab:Tab?){
 
-   Column(modifier = modifier){
+   Column(modifier = modifier.padding(5.dp)){
        when(tab){
            Tab.LIVE_CURRENCY -> {
-               var searchResult by remember { mutableStateOf("") }
-               //Render live currency
-               Column(modifier = Modifier.padding(5.dp)){
-                   SearchBar(onSearch = { query ->
-                      //Arama işlemi
-                   })
-
-                   Text(text = searchResult)
-               }
+               //Render Live Currency Tab
+               LiveCurrencyTab()
            }
            Tab.FAVORITES -> {
                //Render favorite currencies list
+               FavoritesTab()
            }
            Tab.CALCULATOR ->{
                //Render currency calculator
+               CalculatorTab()
            }
 
            else -> {
-               print("Content not found")
+               Text("Content not found")
            }
        }
    }
 }
+
 
 
 enum class Tab{

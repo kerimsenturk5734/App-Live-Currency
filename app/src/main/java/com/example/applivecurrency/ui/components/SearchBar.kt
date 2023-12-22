@@ -25,7 +25,6 @@ fun SearchBar(onSearch: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp)
     ) {
         OutlinedTextField(
             shape = RoundedCornerShape(5.dp),

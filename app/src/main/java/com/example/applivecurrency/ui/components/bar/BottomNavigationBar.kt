@@ -1,3 +1,5 @@
+package com.example.applivecurrency.ui.components.bar
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
