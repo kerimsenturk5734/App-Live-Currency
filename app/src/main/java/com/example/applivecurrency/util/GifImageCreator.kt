@@ -3,7 +3,6 @@ package com.example.applivecurrency.util
 import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -37,6 +36,6 @@ fun Gif(
             }).build(), imageLoader = imageLoader
         ),
         contentDescription = null,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
     )
 }

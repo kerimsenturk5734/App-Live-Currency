@@ -11,7 +11,7 @@ fun backgroundColor() : Color{
 
 @Composable
 fun foregroundColor() : Color{
-    return if(isSystemInDarkTheme()) Color.White else Color.Black
+    return if(isSystemInDarkTheme()) Color.White else Color(0xFF02076B)
 }
 
 @Composable
