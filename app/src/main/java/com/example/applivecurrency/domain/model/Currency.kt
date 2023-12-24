@@ -1,4 +1,4 @@
-package com.example.applivecurrency.data.model
+package com.example.applivecurrency.domain.model
 
 import androidx.annotation.DrawableRes
 
