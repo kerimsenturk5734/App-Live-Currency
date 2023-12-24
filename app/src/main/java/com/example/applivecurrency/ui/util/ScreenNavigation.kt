@@ -1,11 +1,11 @@
-package com.example.applivecurrency.ui.components
+package com.example.applivecurrency.ui.util
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.applivecurrency.MainScreen
-import com.example.applivecurrency.SplashScreen
+import com.example.applivecurrency.ui.screens.MainScreen
+import com.example.applivecurrency.ui.screens.SplashScreen
 
 @Composable
 fun ScreenNavigation(){

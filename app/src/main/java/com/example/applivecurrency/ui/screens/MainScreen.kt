@@ -1,4 +1,4 @@
-package com.example.applivecurrency
+package com.example.applivecurrency.ui.screens
 
 import com.example.applivecurrency.ui.components.bar.BottomNavigationBar
 import androidx.compose.foundation.background
@@ -56,7 +56,7 @@ fun MainScreen(navController: NavController){
 @Composable
 fun RenderTab(
     modifier: Modifier = Modifier,
-    tab:Tab?){
+    tab: Tab?){
 
    Column(modifier = modifier.padding(5.dp)){
        when(tab){

@@ -1,4 +1,4 @@
-package com.example.applivecurrency
+package com.example.applivecurrency.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -22,8 +22,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.applivecurrency.ui.components.Screen
-import com.example.applivecurrency.util.Gif
+import com.example.applivecurrency.R
+import com.example.applivecurrency.ui.util.Screen
+import com.example.applivecurrency.ui.util.Gif
 import kotlinx.coroutines.delay
 
 @Composable
@@ -35,7 +36,8 @@ fun SplashScreen(navController: NavController) {
     ) {
         Box(modifier= Modifier.fillMaxHeight(), contentAlignment = Alignment.Center){
             Gif(modifier = Modifier.fillMaxWidth().padding(bottom = 250.dp),
-                gif = R.drawable.splash)
+                gif = R.drawable.splash
+            )
         }
         Box(modifier= Modifier
             .fillMaxSize()

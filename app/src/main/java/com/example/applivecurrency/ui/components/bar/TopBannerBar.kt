@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.applivecurrency.R
-import com.example.applivecurrency.appText
+import com.example.applivecurrency.ui.screens.appText
 import com.example.applivecurrency.ui.components.componentColor
 import com.example.applivecurrency.ui.components.foregroundColor
-import com.example.applivecurrency.util.Gif
+import com.example.applivecurrency.ui.util.Gif
 
 @Composable
 fun TopBannerBar() {

@@ -1,4 +1,4 @@
-package com.example.applivecurrency.util
+package com.example.applivecurrency.ui.util
 
 import android.os.Build
 import androidx.annotation.DrawableRes

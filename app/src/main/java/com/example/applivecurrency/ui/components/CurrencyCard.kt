@@ -1,6 +1,5 @@
 package com.example.applivecurrency.ui.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -45,13 +44,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.applivecurrency.R
+import com.example.applivecurrency.data.model.Currency
 
-data class Currency(
-    val name: String,
-    val rate: Double,
-    val change: Double,
-    @DrawableRes val image: Int
-)
 
 @Composable
 fun CurrencyCard(
@@ -195,7 +189,8 @@ fun CreateCurrencyCardList(modifier: Modifier = Modifier, currencies:List<Curren
                 modifier = Modifier
                     .fillMaxHeight()
                     .padding(horizontal = 15.dp, vertical = 5.dp),
-                currency = currency)}
+                currency = currency)
+        }
     }
 }
 
