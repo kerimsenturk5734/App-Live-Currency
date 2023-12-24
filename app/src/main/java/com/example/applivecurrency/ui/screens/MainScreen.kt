@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 import com.example.applivecurrency.ui.components.tab.CalculatorTab
 import com.example.applivecurrency.ui.components.tab.FavoritesTab
 import com.example.applivecurrency.ui.components.tab.LiveCurrencyTab
-import com.example.applivecurrency.ui.components.backgroundColor
+import com.example.applivecurrency.ui.util.backgroundColor
 import com.example.applivecurrency.ui.components.bar.TopBannerBar
 
 @OptIn(ExperimentalMaterial3Api::class)

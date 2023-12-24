@@ -22,10 +22,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.example.applivecurrency.R
 import com.example.applivecurrency.ui.screens.Tab
-import com.example.applivecurrency.ui.components.backgroundColor
-import com.example.applivecurrency.ui.components.borderColor
-import com.example.applivecurrency.ui.components.componentColor
-import com.example.applivecurrency.ui.components.foregroundColor
+import com.example.applivecurrency.ui.util.backgroundColor
+import com.example.applivecurrency.ui.util.borderColor
+import com.example.applivecurrency.ui.util.componentColor
+import com.example.applivecurrency.ui.util.foregroundColor
 
 @Composable
 fun BottomNavigationBar(selectedTab: Tab, onTabSelected: (Tab) -> Unit) {

@@ -1,4 +1,4 @@
-package com.example.applivecurrency.ui.components
+package com.example.applivecurrency.ui.util
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable

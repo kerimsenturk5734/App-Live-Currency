@@ -45,6 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.applivecurrency.R
 import com.example.applivecurrency.data.model.Currency
+import com.example.applivecurrency.ui.util.backgroundColor
+import com.example.applivecurrency.ui.util.foregroundColor
+import com.example.applivecurrency.ui.util.primaryComponentColor
 
 
 @Composable
