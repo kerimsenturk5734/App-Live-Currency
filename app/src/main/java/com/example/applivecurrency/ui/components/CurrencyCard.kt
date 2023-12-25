@@ -1,6 +1,5 @@
 package com.example.applivecurrency.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -33,7 +32,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -43,7 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.applivecurrency.R
+import coil.compose.AsyncImage
 import com.example.applivecurrency.domain.model.Currency
 import com.example.applivecurrency.ui.util.backgroundColor
 import com.example.applivecurrency.ui.util.foregroundColor
@@ -76,14 +74,15 @@ fun CurrencyCard(
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically){
 
-            Image(
+            AsyncImage(
                 modifier = Modifier
-                    .size(42.dp)
+                    .size(30.dp)
                     .clip(CircleShape),
-                //TODO: change the image with currency real image by solved from url
-                painter = painterResource(id = R.drawable.dollar),
-                contentDescription = null,
-                contentScale = ContentScale.Crop)
+
+                contentScale = ContentScale.Crop,
+                model = currency.imageURL,
+                contentDescription = "${currency.symbol}_icon"
+            )
 
             Row(
                 modifier =
