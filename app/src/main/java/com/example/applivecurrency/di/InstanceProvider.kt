@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.applivecurrency.data.repository.CurrencyRepository
 import com.example.applivecurrency.data.repository.db.RoomLocalDatabase
+import com.example.applivecurrency.viewmodel.CurrencyViewModel
 
 class InstanceProvider : Application(){
     companion object{
@@ -12,6 +13,8 @@ class InstanceProvider : Application(){
         private var _localDatabaseInstance : RoomLocalDatabase? = null
         @Volatile
         private var _currencyRepositoryInstance : CurrencyRepository? = null
+        @Volatile
+        private var _currencyViewModelInstance : CurrencyViewModel? = null
 
         //RoomDatabase Singleton Instance
         fun provideLocalDatabase(context: Context) : RoomLocalDatabase{
@@ -44,6 +47,21 @@ class InstanceProvider : Application(){
 
             synchronized(this) {
                 val instance = CurrencyRepository(provideLocalDatabase(context).currencyDao())
+
+                tempInstance = instance
+
+                return instance
+            }
+        }
+
+        fun provideCurrencyViewModel(context: Context) : CurrencyViewModel{
+            var tempInstance = _currencyViewModelInstance
+
+            if(tempInstance != null)
+                return tempInstance
+
+            synchronized(this) {
+                val instance = CurrencyViewModel(context)
 
                 tempInstance = instance
 
