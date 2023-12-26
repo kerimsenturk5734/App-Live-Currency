@@ -1,13 +1,12 @@
 package com.example.applivecurrency.di
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.example.applivecurrency.data.repository.CurrencyRepository
 import com.example.applivecurrency.data.repository.db.RoomLocalDatabase
 import com.example.applivecurrency.viewmodel.CurrencyViewModel
 
-class InstanceProvider : Application(){
+class InstanceProvider{
     companion object{
         @Volatile
         private var _localDatabaseInstance : RoomLocalDatabase? = null
