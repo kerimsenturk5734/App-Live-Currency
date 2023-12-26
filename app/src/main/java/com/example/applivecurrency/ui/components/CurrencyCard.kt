@@ -1,16 +1,11 @@
 package com.example.applivecurrency.ui.components
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -34,7 +29,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -44,7 +38,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.applivecurrency.R
+import coil.compose.AsyncImage
+import com.example.applivecurrency.domain.model.Currency
 import com.example.applivecurrency.ui.util.backgroundColor
 import com.example.applivecurrency.ui.util.foregroundColor
 import com.example.applivecurrency.ui.util.primaryComponentColor
@@ -53,7 +48,7 @@ import com.example.applivecurrency.ui.util.primaryComponentColor
 @Composable
 fun CurrencyCard(
     modifier: Modifier = Modifier,
-    currency: CurrencyTestDto,
+    currency: Currency,
     favoriteOnClick:() -> Unit = {}){
 
     Card(
@@ -76,13 +71,15 @@ fun CurrencyCard(
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically){
 
-            Image(
+            AsyncImage(
                 modifier = Modifier
-                    .size(42.dp)
+                    .size(30.dp)
                     .clip(CircleShape),
-                painter = painterResource(id = currency.image),
-                contentDescription = null,
-                contentScale = ContentScale.Crop)
+
+                contentScale = ContentScale.Crop,
+                model = currency.imageURL,
+                contentDescription = "${currency.symbol}_icon"
+            )
 
             Row(
                 modifier =
@@ -114,7 +111,7 @@ fun CurrencyCard(
                     )
                 }
 
-                var isIconChanged by remember { mutableStateOf(false) }
+                var isIconChanged by remember { mutableStateOf(currency.isFavorite) }
                 IconButton(
                     onClick = {
                         isIconChanged = !isIconChanged
@@ -180,48 +177,3 @@ fun annotateCurrencyChange(change: Double): AnnotatedString {
     }
 }
 
-@Composable
-fun CreateCurrencyCardList(
-    modifier: Modifier = Modifier,
-    currencies:List<CurrencyTestDto>){
-
-    LazyColumn(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(10.dp)){
-
-        items(currencies){
-                currency ->
-            CurrencyCard(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(horizontal = 15.dp, vertical = 5.dp),
-                currency = currency)
-        }
-    }
-}
-
-@Composable
-fun TestCurrencyCard(){
-    val currencies = remember {
-        listOf(
-            CurrencyTestDto(symbol = "USD", rate = 8.50, change = 0.5, image = R.drawable.dollar),
-            CurrencyTestDto(symbol = "EUR", rate = 10.20, change = -0.8, image = R.drawable.dollar),
-            CurrencyTestDto(symbol = "GBP", rate = 11.80, change = 1.2, image = R.drawable.dollar),
-            CurrencyTestDto(symbol = "JPY", rate = 0.07, change = -0.3, image = R.drawable.dollar),
-            CurrencyTestDto(symbol = "CNY", rate = 1.30, change = 0.0, image = R.drawable.dollar),
-            CurrencyTestDto(symbol = "JPY", rate = 0.07, change = -0.333, image = R.drawable.dollar),
-            CurrencyTestDto(symbol = "CNY", rate = 1.30, change = 0.9, image = R.drawable.dollar),
-            CurrencyTestDto(symbol = "JPY", rate = 0.07, change = -0.3, image = R.drawable.dollar),
-            CurrencyTestDto(symbol = "CNY", rate = 1.30, change = 0.9, image = R.drawable.dollar),
-        )
-    }
-
-    CreateCurrencyCardList(currencies = currencies)
-}
-
-data class CurrencyTestDto(
-    val symbol : String,
-    val rate : Double,
-    val change : Double,
-    @DrawableRes val image : Int
-)
