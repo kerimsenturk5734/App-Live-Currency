@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -49,7 +50,8 @@ import com.example.applivecurrency.ui.util.primaryComponentColor
 fun CurrencyCard(
     modifier: Modifier = Modifier,
     currency: Currency,
-    favoriteOnClick:() -> Unit = {}){
+    favoriteOnClick:() -> Unit = {},
+    icon: ImageVector? = null){
 
     Card(
         modifier = modifier,
@@ -118,9 +120,16 @@ fun CurrencyCard(
                         favoriteOnClick()
                     }
                 ) {
-                    Icon(
-                        imageVector = if(isIconChanged) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = "Favorite")
+                    if (icon != null) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = icon.name)
+                    }
+                    else{
+                        Icon(
+                            imageVector = if(isIconChanged) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = "Favorite")
+                    }
                 }
             }
 
