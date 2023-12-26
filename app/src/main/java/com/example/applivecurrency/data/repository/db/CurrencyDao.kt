@@ -18,7 +18,7 @@ interface CurrencyDao {
     fun getFavorites():LiveData<List<Currency>>
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCurrency(currency: Currency)
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertListOfCurrency(currencyList: List<Currency>)
     @Update
     suspend fun updateCurrency(currency:Currency)

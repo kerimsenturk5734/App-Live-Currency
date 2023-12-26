@@ -20,5 +20,5 @@ data class Currency(
     val imageURL: String,
 
     @ColumnInfo(name = "is_favorite")
-    val isFavorite : Boolean = false
+    var isFavorite : Boolean = false
 )

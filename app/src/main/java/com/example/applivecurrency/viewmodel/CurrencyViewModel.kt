@@ -48,4 +48,12 @@ class CurrencyViewModel(vmContext: Context) : ViewModel(){
             currencyRepository.updateCurrenciesRates(updateCurrenciesRates)
         }
     }
+
+    fun favoriteCurrency(currency: Currency) {
+        //Toggle the favorite state
+        currency.isFavorite = !currency.isFavorite
+
+        //Update the currency
+        updateCurrency(currency)
+    }
 }
