@@ -3,12 +3,9 @@ package com.example.applivecurrency.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -114,7 +111,7 @@ fun CurrencyCard(
                     )
                 }
 
-                var isIconChanged by remember { mutableStateOf(false) }
+                var isIconChanged by remember { mutableStateOf(currency.isFavorite) }
                 IconButton(
                     onClick = {
                         isIconChanged = !isIconChanged
@@ -176,26 +173,6 @@ fun annotateCurrencyChange(change: Double): AnnotatedString {
             if(isIncreasing) append("+") else if(!isDecreasing) append(" ")
             append(change.toString())
             append("%")
-        }
-    }
-}
-
-@Composable
-fun CreateCurrencyCardList(
-    modifier: Modifier = Modifier,
-    currencies:List<Currency>){
-
-    LazyColumn(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(10.dp)){
-
-        items(currencies){
-                currency ->
-            CurrencyCard(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(horizontal = 15.dp, vertical = 5.dp),
-                currency = currency)
         }
     }
 }

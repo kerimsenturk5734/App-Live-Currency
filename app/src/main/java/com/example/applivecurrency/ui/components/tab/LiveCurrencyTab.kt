@@ -1,12 +1,19 @@
 package com.example.applivecurrency.ui.components.tab
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.example.applivecurrency.di.InstanceProvider
 import com.example.applivecurrency.domain.model.Currency
-import com.example.applivecurrency.ui.components.CreateCurrencyCardList
+import com.example.applivecurrency.ui.components.CurrencyCard
 import com.example.applivecurrency.viewmodel.CurrencyViewModel
 
 
@@ -34,13 +41,26 @@ fun LiveCurrencyTab(){
             "https://cdn-icons-png.flaticon.com/512/11197/11197819.png\n")
     )
 
-    currencyViewModel.insertListOfCurrency(currencyTestList)
+    //currencyViewModel.insertListOfCurrency(currencyTestList)
 
-    val dbCurrenciesState = currencyViewModel.allCurrencies.observeAsState().value
+    val dbCurrencies = currencyViewModel.allCurrencies.observeAsState().value
 
     //Render live currencies
-    if (dbCurrenciesState != null) {
+    if (dbCurrencies != null) {
         Toast.makeText(LocalContext.current, "Currencies Successfully Loaded", Toast.LENGTH_SHORT).show()
-        CreateCurrencyCardList(currencies = dbCurrenciesState)
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(10.dp)){
+
+            items(dbCurrencies){
+                    currency ->
+                CurrencyCard(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(horizontal = 15.dp, vertical = 5.dp),
+                    currency = currency,
+                    favoriteOnClick = { currencyViewModel.favoriteCurrency(currency) })
+            }
+        }
     }
 }
