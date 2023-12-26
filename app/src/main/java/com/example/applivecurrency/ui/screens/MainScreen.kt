@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.applivecurrency.ui.components.tab.CalculatorTab
 import com.example.applivecurrency.ui.components.tab.FavoritesTab
 import com.example.applivecurrency.ui.components.tab.LiveCurrencyTab
 import com.example.applivecurrency.ui.util.backgroundColor
@@ -40,6 +39,7 @@ fun MainScreen(navController: NavController){
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(backgroundColor())
                 .padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
@@ -62,7 +62,6 @@ fun RenderTab(
        when(tab){
            Tab.LIVE_CURRENCY -> LiveCurrencyTab()
            Tab.FAVORITES -> FavoritesTab()
-           Tab.CALCULATOR -> CalculatorTab()
 
            else -> Text("Content not found")
        }
@@ -74,5 +73,4 @@ fun RenderTab(
 enum class Tab{
     LIVE_CURRENCY,
     FAVORITES,
-    CALCULATOR
 }
