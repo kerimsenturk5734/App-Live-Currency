@@ -11,8 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -97,7 +95,8 @@ fun CurrencyCard(
                     color = foregroundColor(),
                     textAlign = TextAlign.Center)
 
-                Row(modifier =
+                //Currency change column
+                /*Row(modifier =
                         Modifier
                             .fillMaxWidth(0.6f)){
 
@@ -111,7 +110,7 @@ fun CurrencyCard(
                         tint = if (currency.change >= 0) Color.Green else Color.Red,
                         modifier = Modifier.size(24.dp)
                     )
-                }
+                }*/
 
                 var isIconChanged by remember { mutableStateOf(currency.isFavorite) }
                 IconButton(

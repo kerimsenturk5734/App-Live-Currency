@@ -1,18 +1,20 @@
 package com.example.applivecurrency.ui.components.tab
 
 import SearchBar
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -27,7 +29,7 @@ fun LiveCurrencyTab(){
     val currencyViewModel : CurrencyViewModel = InstanceProvider
         .provideCurrencyViewModel(LocalContext.current)
 
-    val currencyTestList = listOf<Currency>(
+    /*val currencyTestList = listOf<Currency>(
         Currency(
             symbol = "USD", rate = 29.95, change = -1.27,
             imageURL =
@@ -44,16 +46,15 @@ fun LiveCurrencyTab(){
             symbol = "JPY", rate = 15.5, change = 0.0,
             imageURL =
             "https://cdn-icons-png.flaticon.com/512/11197/11197819.png\n")
-    )
+    )*/
 
     //currencyViewModel.insertListOfCurrency(currencyTestList)
-
     val dbCurrencies = currencyViewModel.allCurrencies.observeAsState().value
 
 
     //Render live currencies
     if (dbCurrencies != null) {
-        Toast.makeText(LocalContext.current, "Currencies Successfully Loaded", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(LocalContext.current, "Currencies Successfully Loaded", Toast.LENGTH_SHORT).show()
 
         var filteredCurrencies by remember { mutableStateOf(dbCurrencies) }
 
@@ -76,6 +77,16 @@ fun LiveCurrencyTab(){
                     currency = currency,
                     favoriteOnClick = { currencyViewModel.favoriteCurrency(currency) })
             }
+        }
+    }else{
+        //Loading...
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
     }
 }

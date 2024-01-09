@@ -27,8 +27,9 @@ class InstanceProvider{
                     .databaseBuilder(
                         context,
                         RoomLocalDatabase::class.java,
-                        "app_live_currency_db"
+                        "app_live_currency_db_new"
                     )
+                    .fallbackToDestructiveMigration()
                     .build()
 
                 tempInstance = instance

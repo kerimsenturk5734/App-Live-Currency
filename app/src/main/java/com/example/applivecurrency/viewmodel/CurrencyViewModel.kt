@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.applivecurrency.data.repository.CurrencyRepository
 import com.example.applivecurrency.di.InstanceProvider
 import com.example.applivecurrency.domain.model.Currency
-import com.example.applivecurrency.domain.payload.UpdateCurrencyRatesRequest
 import kotlinx.coroutines.launch
 
 class CurrencyViewModel(vmContext: Context) : ViewModel(){
@@ -15,20 +14,9 @@ class CurrencyViewModel(vmContext: Context) : ViewModel(){
     private val currencyRepository : CurrencyRepository = InstanceProvider
         .provideCurrencyRepository(vmContext)
 
+
     val allCurrencies = currencyRepository.readAllData
     val favoriteCurrencies = currencyRepository.getFavorites
-
-    fun insertCurrency(currency: Currency) {
-        viewModelScope.launch {
-            currencyRepository.insertCurrency(currency)
-        }
-    }
-
-    fun insertListOfCurrency(currencyList: List<Currency>) {
-        viewModelScope.launch {
-            currencyRepository.insertListOfCurrency(currencyList)
-        }
-    }
 
     fun updateCurrency(currency: Currency) {
         viewModelScope.launch {
@@ -36,19 +24,11 @@ class CurrencyViewModel(vmContext: Context) : ViewModel(){
         }
     }
 
-    fun deleteCurrency(currency: Currency) {
-        viewModelScope.launch {
-            currencyRepository.deleteCurrency(currency)
+    fun upsertCurrenciesFields(currencies: List<Currency>){
+        viewModelScope.launch{
+            currencyRepository.upsertCurrenciesFields(currencies)
         }
     }
-
-    //This method will be using by api service to update db if net connection exist !!!
-    fun updateCurrenciesRates(updateCurrenciesRates: List<UpdateCurrencyRatesRequest>) {
-        viewModelScope.launch {
-            currencyRepository.updateCurrenciesRates(updateCurrenciesRates)
-        }
-    }
-
     fun favoriteCurrency(currency: Currency) {
         //Toggle the favorite state
         currency.isFavorite = !currency.isFavorite
@@ -56,4 +36,6 @@ class CurrencyViewModel(vmContext: Context) : ViewModel(){
         //Update the currency
         updateCurrency(currency)
     }
+
+
 }
