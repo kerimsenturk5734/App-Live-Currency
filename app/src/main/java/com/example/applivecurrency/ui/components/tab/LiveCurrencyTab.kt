@@ -3,79 +3,133 @@ package com.example.applivecurrency.ui.components.tab
 import SearchBar
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.applivecurrency.di.InstanceProvider
 import com.example.applivecurrency.domain.model.Currency
 import com.example.applivecurrency.ui.components.CurrencyCard
+import com.example.applivecurrency.ui.components.ErrorComponent
+import com.example.applivecurrency.ui.components.ErrorShower
 import com.example.applivecurrency.viewmodel.CurrencyViewModel
 
 
 @Composable
 fun LiveCurrencyTab(){
+    val context = LocalContext.current
+
+    val apiCurrencyViewModel = InstanceProvider.provideAPICurrencyViewModel(context)
+    val error by apiCurrencyViewModel.error.observeAsState()
+
     val currencyViewModel : CurrencyViewModel = InstanceProvider
-        .provideCurrencyViewModel(LocalContext.current)
+        .provideCurrencyViewModel(context)
 
-    val currencyTestList = listOf<Currency>(
-        Currency(
-            symbol = "USD", rate = 29.95, change = -1.27,
-            imageURL =
-            "https://t4.ftcdn.net/jpg/01/34/67/51/240_F_134675192_TC1KncAkC6EAEBDxXj5Uy1900F1ZbJ6v.jpg"),
-        Currency(
-            symbol = "EUR", rate = 31.95, change = -1.03,
-            imageURL =
-            "https://cdn-icons-png.flaticon.com/512/733/733324.png"),
-        Currency(
-            symbol = "GBP", rate = 12.95, change = 1.7,
-            imageURL =
-            "https://cdn-icons-png.flaticon.com/512/10593/10593703.png"),
-        Currency(
-            symbol = "JPY", rate = 15.5, change = 0.0,
-            imageURL =
-            "https://cdn-icons-png.flaticon.com/512/11197/11197819.png\n")
-    )
+    val dbCurrencies by currencyViewModel.allCurrencies.observeAsState(emptyList())
+    
 
-    //currencyViewModel.insertListOfCurrency(currencyTestList)
+    Column{
+        //Render live currencies
+        Text(text = "Error: $error", color = MaterialTheme.colors.error)
 
-    val dbCurrencies = currencyViewModel.allCurrencies.observeAsState().value
+        if(dbCurrencies.isEmpty())
+            RenderError(errorCode = error)
 
+        else{
+            //Show a toast if data couldn't update
+            InformError(errorCode = error)
 
-    //Render live currencies
-    if (dbCurrencies != null) {
-        Toast.makeText(LocalContext.current, "Currencies Successfully Loaded", Toast.LENGTH_SHORT).show()
+            var filteredCurrencies by remember { mutableStateOf(dbCurrencies) }
+            //Create SearchBar
+            SearchBar(onSearch = { query ->
+                //Search process
+                filteredCurrencies = dbCurrencies.filter { currency: Currency ->
+                    currency.symbol.contains(query, true)
+                }
+            })
 
-        var filteredCurrencies by remember { mutableStateOf(dbCurrencies) }
+            //Create Currency List in a lazy column
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ){
 
-        SearchBar(onSearch = { query ->
-            //Search process
-            filteredCurrencies = dbCurrencies.filter { currency: Currency ->
-                currency.symbol.contains(query, true)
-            }
-        })
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(10.dp)){
-
-            items(filteredCurrencies){
-                    currency ->
-                CurrencyCard(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(horizontal = 15.dp, vertical = 5.dp),
-                    currency = currency,
-                    favoriteOnClick = { currencyViewModel.favoriteCurrency(currency) })
+                items(filteredCurrencies){
+                        currency ->
+                    CurrencyCard(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(horizontal = 15.dp, vertical = 5.dp),
+                        currency = currency,
+                        favoriteOnClick = { currencyViewModel.favoriteCurrency(currency) }
+                    )
+                }
             }
         }
+
+        LaunchedEffect(true) {
+            apiCurrencyViewModel.refresh()
+        }
+    }
+}
+
+@Composable
+fun Loading(){
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ){
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(20.dp)){
+
+            CircularProgressIndicator()
+        }
+    }
+}
+
+@Composable
+fun RenderError(errorCode : Int?){
+    when(errorCode){
+        404 -> ErrorShower(errorComponent = ErrorComponent.EMPTY_LIST)
+        429 -> ErrorShower(errorComponent = ErrorComponent.UNAUTHORIZED)
+        else -> Text(text = "Bir sorun yok")
+    }
+}
+
+@Composable
+fun InformError(errorCode : Int?){
+    when(errorCode){
+        404 -> Toast.makeText(
+            LocalContext.current,
+            "Currencies couldn't refreshed. \n These currencies are out of date.",
+            Toast.LENGTH_LONG).show()
+
+        429 -> Toast.makeText(
+            LocalContext.current,
+            "Currencies couldn't refreshed. \n API denied the request. Please check your API KEY",
+            Toast.LENGTH_LONG).show()
+
+        else -> Toast.makeText(
+            LocalContext.current,
+            "Currencies Successfully Loaded",
+            Toast.LENGTH_SHORT).show()
     }
 }
