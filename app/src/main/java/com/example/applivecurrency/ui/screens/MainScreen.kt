@@ -47,7 +47,8 @@ fun MainScreen(navController: NavController){
                 modifier = Modifier
                     .fillMaxSize()
                     .background(backgroundColor()),
-                tab = selectedTab)
+                tab = selectedTab,
+                nav = navController)
         }
     }
 }
@@ -56,12 +57,13 @@ fun MainScreen(navController: NavController){
 @Composable
 fun RenderTab(
     modifier: Modifier = Modifier,
-    tab: Tab?){
+    tab: Tab?,
+    nav: NavController){
 
    Column(modifier = modifier.padding(5.dp)){
        when(tab){
-           Tab.LIVE_CURRENCY -> LiveCurrencyTab()
-           Tab.FAVORITES -> FavoritesTab()
+           Tab.LIVE_CURRENCY -> LiveCurrencyTab(nav)
+           Tab.FAVORITES -> FavoritesTab(nav)
 
            else -> Text("Content not found")
        }
