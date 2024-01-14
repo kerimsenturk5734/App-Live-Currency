@@ -12,6 +12,7 @@ import com.example.applivecurrency.di.InstanceProvider
 import com.example.applivecurrency.domain.CurrencyMapper
 import com.example.applivecurrency.domain.model.Currency
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,17 +21,19 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class APICurrencyViewModel(context: Context) : ViewModel() {
-    val currencyViewModel = InstanceProvider.provideCurrencyViewModel(context)
+    private val currencyViewModel = InstanceProvider.provideCurrencyViewModel(context)
 
     private val _currencyData = MutableLiveData<List<Currency>>()
     val currencyData: LiveData<List<Currency>> get() = _currencyData
 
-    private val _error = MutableLiveData<Int>(-1)
-    val error: LiveData<Int> get() = _error
+    private val _statusCode = MutableLiveData<Int>()
+    val statusCode: LiveData<Int> get() = _statusCode
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing : StateFlow<Boolean> get() = _isRefreshing
 
     fun fetchCurrencyToAll(baseCurrency: String, quantity: Int) {
         viewModelScope.launch {
@@ -49,23 +52,27 @@ class APICurrencyViewModel(context: Context) : ViewModel() {
                             ?.let { currencyViewModel.upsertCurrenciesFields(it) }
                     } else {
                         Log.d("API Data Failed", response.message()+response.code())
-                        _error.value = response.code()
                     }
 
+                    _statusCode.value = response.code()
                     _isLoading.update { false }
                 }
 
                 override fun onFailure(call: Call<APICurrencyToAllResponse>, t: Throwable) {
-                    _error.value = 404
-                    Log.d("API Error", _error.toString())
+                    _statusCode.value = 404
+                    Log.d("API Error", _statusCode.value.toString())
 
                     _isLoading.update { false }
                 }
             })
-
         }
     }
     fun refresh(){
-        fetchCurrencyToAll("TRY", 1)
+        viewModelScope.launch{
+            _isRefreshing.emit(true)
+            fetchCurrencyToAll("TRY", 1)
+            _isRefreshing.emit(false)
+            Log.d("Refresh Fetch", isRefreshing.value.toString())
+        }
     }
 }

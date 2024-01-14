@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 fun Trial() {
     // UI is composed using the Composable functions
     // The UI reacts to the LiveData updates using the collectAsState extension function
-    val viewModel = APICurrencyViewModel(LocalContext.current)
+    /*val viewModel = APICurrencyViewModel(LocalContext.current)
     val error = viewModel.error.observeAsState().value
 
     //val a by viewModel.currencyData.observeAsState()
@@ -30,5 +30,5 @@ fun Trial() {
         LaunchedEffect(true) {
             viewModel.fetchCurrencyToAll("USD", 1)
         }
-    }
+    }*/
 }
