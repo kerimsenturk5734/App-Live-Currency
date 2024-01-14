@@ -3,11 +3,9 @@ package com.example.applivecurrency.ui.components.tab
 import SearchBar
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -40,6 +39,7 @@ import com.example.applivecurrency.ui.components.bar.InfoBar
 import com.example.applivecurrency.ui.util.Screen
 import com.example.applivecurrency.ui.util.foregroundColor
 import com.example.applivecurrency.viewmodel.CurrencyViewModel
+import kotlinx.coroutines.delay
 import java.util.Calendar
 
 @Composable
@@ -98,9 +98,10 @@ fun LiveCurrencyTab(nav: NavController){
                         Column(horizontalAlignment = Alignment.CenterHorizontally){
                             Icon(
                                 imageVector = iconVector,
-                                contentDescription = iconVector.name
+                                contentDescription = iconVector.name,
+                                tint = foregroundColor()
                             )
-                            Text(color= foregroundColor(),text = "Refresh")
+                            Text(color= Color.Magenta, text = "Refresh")
                         }
                     }
                 }
@@ -129,43 +130,16 @@ fun LiveCurrencyTab(nav: NavController){
 
         LaunchedEffect(true) {
             apiCurrencyViewModel.refresh()
+            delay(1000)
         }
     }
 }
 
 @Composable
 fun RenderError(statusCode : Int?, nav: NavController){
-    val apiCurrencyViewModel = InstanceProvider.provideAPICurrencyViewModel(LocalContext.current)
     when(statusCode){
-        404 -> ErrorShower(errorComponent = ErrorComponent.NOT_FOUND)
-        429 -> ErrorShower(errorComponent = ErrorComponent.UNAUTHORIZED)
-        else -> Loading(nav = nav)
-    }
-}
-
-@Composable
-fun Loading(nav: NavController){
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ){
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp)){
-
-            IconButton(
-                modifier = Modifier.size(50.dp),
-                onClick = {nav.navigate(Screen.SPLASH_SCREEN.name)}
-            ) {
-                val iconVector = Icons.Default.Refresh
-
-                Icon(
-                    imageVector = iconVector,
-                    contentDescription = iconVector.name
-                )
-            }
-        }
+        404 -> ErrorShower(errorComponent = ErrorComponent.NOT_FOUND, nav = nav)
+        429 -> ErrorShower(errorComponent = ErrorComponent.UNAUTHORIZED, nav = nav)
     }
 }
 

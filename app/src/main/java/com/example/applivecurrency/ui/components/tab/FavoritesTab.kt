@@ -12,6 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.applivecurrency.di.InstanceProvider
 import com.example.applivecurrency.ui.components.CurrencyCard
 import com.example.applivecurrency.ui.components.ErrorComponent
@@ -19,7 +20,7 @@ import com.example.applivecurrency.ui.components.ErrorShower
 import com.example.applivecurrency.viewmodel.CurrencyViewModel
 
 @Composable
-fun FavoritesTab(){
+fun FavoritesTab(nav : NavController){
     val currencyViewModel : CurrencyViewModel = InstanceProvider
         .provideCurrencyViewModel(LocalContext.current)
 
@@ -49,8 +50,6 @@ fun FavoritesTab(){
         }
 
         if(myFavoriteCurrencies.isEmpty())
-            ErrorShower(errorComponent = ErrorComponent.EMPTY_LIST)
-
-
+            ErrorShower(errorComponent = ErrorComponent.EMPTY_LIST, nav = nav)
     }
 }

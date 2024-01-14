@@ -63,7 +63,7 @@ fun RenderTab(
    Column(modifier = modifier.padding(5.dp)){
        when(tab){
            Tab.LIVE_CURRENCY -> LiveCurrencyTab(nav)
-           Tab.FAVORITES -> FavoritesTab()
+           Tab.FAVORITES -> FavoritesTab(nav)
 
            else -> Text("Content not found")
        }

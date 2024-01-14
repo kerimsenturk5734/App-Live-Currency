@@ -6,19 +6,26 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.applivecurrency.R
+import com.example.applivecurrency.ui.util.Screen
 import com.example.applivecurrency.ui.util.foregroundColor
 
 @Composable
-fun ErrorShower(errorComponent: ErrorComponent){
+fun ErrorShower(errorComponent: ErrorComponent, nav: NavController){
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -31,6 +38,23 @@ fun ErrorShower(errorComponent: ErrorComponent){
                 ErrorComponent.NOT_FOUND -> NotFound()
                 ErrorComponent.EMPTY_LIST -> EmptyList()
                 ErrorComponent.UNAUTHORIZED -> Unauthorized()
+            }
+            if(errorComponent != ErrorComponent.EMPTY_LIST){
+                IconButton(
+                    modifier = Modifier.size(50.dp),
+                    onClick = {nav.navigate(Screen.SPLASH_SCREEN.name)}
+                ) {
+                    val iconVector = Icons.Default.Refresh
+
+                    Column(horizontalAlignment = Alignment.CenterHorizontally){
+                        Icon(
+                            imageVector = iconVector,
+                            contentDescription = iconVector.name,
+                            tint = foregroundColor()
+                        )
+                        Text(color= Color.Magenta,text = "Refresh")
+                    }
+                }
             }
         }
     }
