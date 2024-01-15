@@ -39,7 +39,6 @@ import com.example.applivecurrency.ui.components.bar.InfoBar
 import com.example.applivecurrency.ui.util.Screen
 import com.example.applivecurrency.ui.util.foregroundColor
 import com.example.applivecurrency.viewmodel.CurrencyViewModel
-import kotlinx.coroutines.delay
 import java.util.Calendar
 
 @Composable
@@ -47,7 +46,7 @@ fun LiveCurrencyTab(nav: NavController){
     val context = LocalContext.current
 
     val apiCurrencyViewModel = InstanceProvider.provideAPICurrencyViewModel(context)
-    val status by apiCurrencyViewModel.statusCode.observeAsState(200)
+    val status by apiCurrencyViewModel.statusCode.observeAsState()
 
     val currencyViewModel : CurrencyViewModel = InstanceProvider
         .provideCurrencyViewModel(context)
@@ -130,7 +129,6 @@ fun LiveCurrencyTab(nav: NavController){
 
         LaunchedEffect(true) {
             apiCurrencyViewModel.refresh()
-            delay(1000)
         }
     }
 }
@@ -140,6 +138,7 @@ fun RenderError(statusCode : Int?, nav: NavController){
     when(statusCode){
         404 -> ErrorShower(errorComponent = ErrorComponent.NOT_FOUND, nav = nav)
         429 -> ErrorShower(errorComponent = ErrorComponent.UNAUTHORIZED, nav = nav)
+        else -> ErrorShower(errorComponent = ErrorComponent.NOT_FOUND, nav = nav)
     }
 }
 

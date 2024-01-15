@@ -86,9 +86,16 @@ fun CurrencyCard(
                 Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically){
+                verticalAlignment = Alignment.CenterVertically
+            ){
 
-                Text(text = annotateCurrencyName(currency.symbol), color = foregroundColor())
+                Text(text = annotateCurrencySymbol(currency.symbol), color = foregroundColor())
+
+                Text(
+                    modifier = Modifier.fillMaxWidth(0.2f),
+                    text = annotateCurrencyName(currency.name),
+                    color = foregroundColor())
+
                 Text(
                     modifier = Modifier.fillMaxWidth(0.4f),
                     text = annotateCurrencyRate(currency.rate),
@@ -122,23 +129,22 @@ fun CurrencyCard(
                     if (icon != null) {
                         Icon(
                             imageVector = icon,
-                            contentDescription = icon.name)
+                            contentDescription = icon.name
+                        )
                     }
                     else{
                         Icon(
                             imageVector = if(isIconChanged) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Favorite")
+                            contentDescription = "Favorite"
+                        )
                     }
                 }
             }
-
-
-
         }
     }
 }
 
-fun annotateCurrencyName(text: String): AnnotatedString {
+fun annotateCurrencySymbol(text: String): AnnotatedString {
     return buildAnnotatedString{
         withStyle(
             style = SpanStyle(
@@ -151,11 +157,24 @@ fun annotateCurrencyName(text: String): AnnotatedString {
     }
 }
 
+fun annotateCurrencyName(text: String): AnnotatedString {
+    return buildAnnotatedString{
+        withStyle(
+            style = SpanStyle(
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium,
+                fontFamily = FontFamily.Monospace)
+        ){
+            append(text)
+        }
+    }
+}
+
 fun annotateCurrencyRate(rate: Double): AnnotatedString {
     return buildAnnotatedString{
         withStyle(
             style = SpanStyle(
-                fontSize = 17.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.Monospace,
             )

@@ -10,6 +10,9 @@ data class Currency(
     @ColumnInfo(name = "symbol")
     val symbol: String,
 
+    @ColumnInfo(name = "name")
+    val name: String,
+
     @ColumnInfo(name = "rate")
     val rate: Double,
 

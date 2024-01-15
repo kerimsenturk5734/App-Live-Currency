@@ -36,7 +36,7 @@ fun SplashScreen(navController: NavController) {
     val apiCurrencyViewModel = InstanceProvider.provideAPICurrencyViewModel(LocalContext.current)
 
     //  Update/Insert the db with currency values matching with 1 unit TRY
-    apiCurrencyViewModel.refresh()
+    //apiCurrencyViewModel.refresh()
 
     val isLoading by apiCurrencyViewModel.isLoading.collectAsState()
 

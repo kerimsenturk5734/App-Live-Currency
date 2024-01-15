@@ -43,6 +43,7 @@ class APICurrencyViewModel(context: Context) : ViewModel() {
                 override fun onResponse(call: Call<APICurrencyToAllResponse>, response: Response<APICurrencyToAllResponse>) {
 
                     if (response.isSuccessful) {
+                        _statusCode.value = response.code()
                         Log.d("API Data Success", response.code().toString())
                         _currencyData.value = response.body()
                             ?.let { CurrencyMapper().apiCurrenciesToCurrencies(it.result.data) }
@@ -51,10 +52,11 @@ class APICurrencyViewModel(context: Context) : ViewModel() {
                             ?.let { CurrencyMapper().apiCurrenciesToCurrencies(it.result.data) }
                             ?.let { currencyViewModel.upsertCurrenciesFields(it) }
                     } else {
+                        _statusCode.value = response.code()
                         Log.d("API Data Failed", response.message()+response.code())
                     }
 
-                    _statusCode.value = response.code()
+
                     _isLoading.update { false }
                 }
 
