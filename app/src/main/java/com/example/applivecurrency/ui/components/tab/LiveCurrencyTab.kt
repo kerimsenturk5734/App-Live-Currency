@@ -1,38 +1,163 @@
 package com.example.applivecurrency.ui.components.tab
 
 import SearchBar
+import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.example.applivecurrency.R
-import com.example.applivecurrency.ui.components.CreateCurrencyCardList
-import com.example.applivecurrency.ui.components.Currency
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.applivecurrency.di.InstanceProvider
+import com.example.applivecurrency.domain.model.Currency
+import com.example.applivecurrency.ui.components.CurrencyCard
+import com.example.applivecurrency.ui.components.ErrorComponent
+import com.example.applivecurrency.ui.components.ErrorShower
+import com.example.applivecurrency.ui.components.bar.InfoBar
+import com.example.applivecurrency.ui.util.Screen
+import com.example.applivecurrency.ui.util.foregroundColor
+import com.example.applivecurrency.viewmodel.CurrencyViewModel
+import java.util.Calendar
 
 @Composable
-fun LiveCurrencyTab(){
-    val currencyList = listOf(
-        Currency(name = "EUR", rate = 10.20, change = -0.8, image = R.drawable.dollar),
-        Currency(name = "GBP", rate = 11.80, change = 1.2, image = R.drawable.dollar),
-        Currency(name = "JPY", rate = 0.07, change = -0.3, image = R.drawable.dollar),
-        Currency(name = "CNY", rate = 1.30, change = 0.0, image = R.drawable.dollar),
-        Currency(name = "JPY", rate = 0.07, change = -0.333, image = R.drawable.dollar),
-        Currency(name = "CNY", rate = 1.30, change = 0.9, image = R.drawable.dollar),
-        Currency(name = "JPY", rate = 0.07, change = -0.3, image = R.drawable.dollar),
-        Currency(name = "CNY", rate = 1.30, change = 0.9, image = R.drawable.dollar),
-    )
+fun LiveCurrencyTab(nav: NavController){
+    val context = LocalContext.current
 
-    val currencies by remember { mutableStateOf(currencyList) }
-    var filteredCurrencies by remember { mutableStateOf(currencies) }
+    val apiCurrencyViewModel = InstanceProvider.provideAPICurrencyViewModel(context)
+    val status by apiCurrencyViewModel.statusCode.observeAsState()
 
-    SearchBar(onSearch = { query ->
-        //Search process
-        filteredCurrencies = currencies.filter { currency: Currency ->
-            currency.name.contains(query, true)
+    val currencyViewModel : CurrencyViewModel = InstanceProvider
+        .provideCurrencyViewModel(context)
+
+    val dbCurrencies by currencyViewModel.allCurrencies.observeAsState(emptyList())
+
+    val isRefreshing by apiCurrencyViewModel.isRefreshing.collectAsState()
+
+    Column{
+        //Info Bar
+        InfoBar(
+            status = status.toString(),
+            currencySize = dbCurrencies.size,
+            lastUpdate = Calendar.getInstance().time)
+
+        if(dbCurrencies.isEmpty())
+            RenderError(status, nav)
+
+        else{
+            //Show a toast if data couldn't update
+            InformWarning(status = status)
+
+            //Filtered Currency list by search bar
+            var filteredCurrencies by remember { mutableStateOf(dbCurrencies) }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(15.dp),
+                modifier = Modifier.padding(10.dp)
+            ){
+
+               //Create SearchBar
+               SearchBar(onSearch = { query ->
+                   //Search process
+                   filteredCurrencies = dbCurrencies.filter { currency: Currency ->
+                       currency.symbol.contains(query, true)
+                   }
+               })
+
+                if(isRefreshing.not()){
+                    //Create a refresh button to refresh screen
+                    IconButton(
+                        modifier = Modifier.size(50.dp),
+                        onClick = {nav.navigate(Screen.SPLASH_SCREEN.name)}
+                    ) {
+                        val iconVector = Icons.Default.Refresh
+
+                        Column(horizontalAlignment = Alignment.CenterHorizontally){
+                            Icon(
+                                imageVector = iconVector,
+                                contentDescription = iconVector.name,
+                                tint = foregroundColor()
+                            )
+                            Text(color= Color.Magenta, text = "Refresh")
+                        }
+                    }
+                }
+                else{
+                    CircularProgressIndicator()
+                }
+            }
+
+            //Create Currency List in a lazy column
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ){
+
+                items(filteredCurrencies){
+                        currency ->
+                    CurrencyCard(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(horizontal = 15.dp, vertical = 5.dp),
+                        currency = currency,
+                        favoriteOnClick = { currencyViewModel.favoriteCurrency(currency) }
+                    )
+                }
+            }
         }
-    })
 
-    //Render live currencies
-    CreateCurrencyCardList(currencies = filteredCurrencies)
+        LaunchedEffect(true) {
+            apiCurrencyViewModel.refresh()
+        }
+    }
+}
+
+@Composable
+fun RenderError(statusCode : Int?, nav: NavController){
+    when(statusCode){
+        404 -> ErrorShower(errorComponent = ErrorComponent.NOT_FOUND, nav = nav)
+        429 -> ErrorShower(errorComponent = ErrorComponent.UNAUTHORIZED, nav = nav)
+        else -> ErrorShower(errorComponent = ErrorComponent.NOT_FOUND, nav = nav)
+    }
+}
+
+@Composable
+fun InformWarning(status : Int?){
+    when(status){
+        404 -> Toast.makeText(
+            LocalContext.current,
+            "Currencies couldn't refreshed. \n These currencies are out of date.",
+            Toast.LENGTH_LONG).show()
+
+        429 -> Toast.makeText(
+            LocalContext.current,
+            "Currencies couldn't refreshed. \n API denied the request. Please check your API KEY",
+            Toast.LENGTH_LONG).show()
+
+        else -> Toast.makeText(
+            LocalContext.current,
+            "Currencies Successfully Loaded",
+            Toast.LENGTH_SHORT).show()
+    }
 }

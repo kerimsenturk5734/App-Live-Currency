@@ -17,14 +17,13 @@ import com.example.applivecurrency.ui.util.backgroundColor
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(onSearch: (String) -> Unit) {
+fun SearchBar(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
     var query by remember { mutableStateOf("") }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
     ) {
         OutlinedTextField(
             shape = RoundedCornerShape(5.dp),
@@ -33,8 +32,7 @@ fun SearchBar(onSearch: (String) -> Unit) {
                 query = it
                 onSearch(query)
             },
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = modifier
                 .background(backgroundColor()),
             label = { Text("Search") },
             leadingIcon = {

@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.applivecurrency.ui.screens.MainScreen
 import com.example.applivecurrency.ui.screens.SplashScreen
+import com.example.applivecurrency.ui.screens.Trial
 
 @Composable
 fun ScreenNavigation(){
@@ -19,10 +20,15 @@ fun ScreenNavigation(){
         composable(route = Screen.MAIN_SCREEN.name){
             MainScreen(navController = navController)
         }
+
+        composable(route = Screen.TRIAL_SCREEN.name){
+            Trial()
+        }
     }
 }
 
 enum class Screen(screenName: String){
     SPLASH_SCREEN("splash_screen"),
-    MAIN_SCREEN("main_screen")
+    MAIN_SCREEN("main_screen"),
+    TRIAL_SCREEN("trial_screen")
 }
